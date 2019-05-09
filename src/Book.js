@@ -3,8 +3,13 @@ import React from 'react'
 
 function book (props) {
     const thumbnail = props.book.imageLinks.smallThumbnail || props.book.imageLinks.thumbnail
-    console.log(thumbnail)
     const { title, authors, shelf } = props.book
+    const shelves = [
+        {name: "Currently Reading", id: "currentlyReading"},
+        {name: "Want to Read", id: "wantToRead"},
+        {name: "Read", id: "read"},
+        {name: "None", id: "none"},
+    ];
     return(
         <div className="book">
             <div className="book-top">
@@ -12,10 +17,9 @@ function book (props) {
                 <div className="book-shelf-changer">
                     <select>
                         <option value="move" disabled>Move to...</option>
-                        <option value="currentlyReading" selected={ shelf === "currentlyReading" }>Currently Reading</option>
-                        <option value="wantToRead" selected={ shelf === "wantToRead" }>Want to Read</option>
-                        <option value="read" selected={ shelf === "read" }>Read</option>
-                        <option value="none" selected={ shelf === null }>None</option>
+                        {shelves.map( (item) => (
+                            <option key={item.id} value={item.id} selected={shelf === item.id}>{item.name}</option>
+                        ))}
                     </select>
                 </div>
             </div>
