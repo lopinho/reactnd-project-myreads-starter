@@ -4,7 +4,7 @@ import React from 'react'
 function book (props) {
     const thumbnail = props.book.imageLinks.smallThumbnail || props.book.imageLinks.thumbnail
     console.log(thumbnail)
-    const { title, authors } = props.book
+    const { title, authors, shelf } = props.book
     return(
         <div className="book">
             <div className="book-top">
@@ -12,10 +12,10 @@ function book (props) {
                 <div className="book-shelf-changer">
                     <select>
                         <option value="move" disabled>Move to...</option>
-                        <option value="currentlyReading">Currently Reading</option>
-                        <option value="wantToRead">Want to Read</option>
-                        <option value="read">Read</option>
-                        <option value="none">None</option>
+                        <option value="currentlyReading" selected={ shelf === "currentlyReading" }>Currently Reading</option>
+                        <option value="wantToRead" selected={ shelf === "wantToRead" }>Want to Read</option>
+                        <option value="read" selected={ shelf === "read" }>Read</option>
+                        <option value="none" selected={ shelf === null }>None</option>
                     </select>
                 </div>
             </div>
