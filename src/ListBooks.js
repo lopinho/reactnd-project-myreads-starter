@@ -5,7 +5,7 @@ import Book from './Book'
 
 class ListBooks extends React.Component {
     render () {
-        const { books } = this.props
+        const { books, updateShelf, loading } = this.props
         const reading = (books && books.filter((book) => ( book.shelf === "currentlyReading" ))) || [];
         const want = (books && books.filter((book) => ( book.shelf === "wantToRead" ))) || [];
         const read = (books && books.filter((book) => ( book.shelf === "read" ))) || [];
@@ -21,9 +21,16 @@ class ListBooks extends React.Component {
                             <h2 className="bookshelf-title">Currently Reading</h2>
                             <div className="bookshelf-books">
                                 <ol className="books-grid">
-                                    {books ?
-                                        reading.map( (book, i) => (<li key={i}><Book book={book} /></li>)) :
-                                        'LOADING ...'
+                                    {loading ?
+                                        'LOADING ...':
+                                        reading.map( (book, i) => (
+                                            <li key={i}>
+                                                <Book
+                                                    updateShelf={updateShelf}
+                                                    book={book}
+                                                />
+                                            </li>
+                                        ))
                                     }
                                 </ol>
                             </div>
@@ -32,9 +39,16 @@ class ListBooks extends React.Component {
                             <h2 className="bookshelf-title">Want to Read</h2>
                             <div className="bookshelf-books">
                                 <ol className="books-grid">
-                                    {books ?
-                                        want.map( (book, i) => (<li key={i}><Book book={book} /></li>)):
-                                        'LOADING ..'
+                                    {loading ?
+                                        'LOADING ..':
+                                        want.map( (book, i) => (
+                                            <li key={i}>
+                                                <Book
+                                                    updateShelf={updateShelf}
+                                                    book={book}
+                                                />
+                                            </li>
+                                        ))
                                     }
                                 </ol>
                             </div>
@@ -43,9 +57,16 @@ class ListBooks extends React.Component {
                             <h2 className="bookshelf-title">Read</h2>
                             <div className="bookshelf-books">
                                 <ol className="books-grid">
-                                    {books ?
-                                        read.map( (book, i) => (<li key={i}><Book book={book} /></li>)):
-                                        'LOADING ...'
+                                    {loading ?
+                                        'LOADING ..':
+                                        read.map( (book, i) => (
+                                            <li key={i}>
+                                                <Book
+                                                    updateShelf={updateShelf}
+                                                    book={book}
+                                                />
+                                            </li>
+                                        ))
                                     }
                                 </ol>
                             </div>
