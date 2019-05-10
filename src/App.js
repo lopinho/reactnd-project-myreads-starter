@@ -58,7 +58,12 @@ class BooksApp extends React.Component {
         .then( (updatedShelfs) => {
             this.setState((prevState) => {
                 const books = prevState.books
-                books[book.id].shelf = shelf
+                if (book.id in books) {
+                    books[book.id].shelf = shelf
+                } else {
+                    book.shelf = shelf
+                    books[book.id] = book
+                }
                 return {
                     shelfs: updatedShelfs,
                     books: books,
@@ -80,7 +85,6 @@ class BooksApp extends React.Component {
                         books={this.state.books}
                         updateShelf={(book, shelf) => {
                             this.updateShelf(book, shelf)
-                            history.push('/')
                         }}
                     />
                 )}/>

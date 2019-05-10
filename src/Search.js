@@ -52,10 +52,10 @@ class Search extends React.Component {
             </div>
             <div className="search-books-results">
                 <ol className="books-grid">
-                    {this.props.loading? 'LOADING ...':''}
+                    {this.props.loading? <h3>LOADING ...</h3>:''}
                     {searchResults.hasOwnProperty('error') ?
                         searchResults.error :
-                        this.state.query.length ?
+                        this.state.query.length?
                             searchResults.map( (book) => (
                                 <Book
                                     key={book.id}
@@ -64,7 +64,9 @@ class Search extends React.Component {
                                     updateShelf={updateShelf}
                                 />
                             )):
-                            'Waiting for your search ;)'
+                            this.props.loading?
+                            '':
+                            <h3>Waiting for your search ;)</h3>
                     }
                 </ol>
             </div>

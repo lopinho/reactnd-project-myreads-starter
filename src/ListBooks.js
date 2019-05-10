@@ -9,13 +9,15 @@ class ListBooks extends React.Component {
         const books = (
             this.props.shelfs.hasOwnProperty(shelfID) ?
             this.props.shelfs[shelfID].map((bookID) => (
-                <li key={bookID}>
-                    <Book
-                        book={this.props.books[bookID]}
-                        updateShelf={this.props.updateShelf}
-                        shelf={shelfID}
-                    />
-                </li>
+                this.props.books.hasOwnProperty(bookID) ?
+                    <li key={bookID}>
+                        <Book
+                            book={this.props.books[bookID]}
+                            updateShelf={this.props.updateShelf}
+                            shelf={shelfID}
+                        />
+                    </li>:
+                    ''
             )):
             'No books in this shelf'
         )
