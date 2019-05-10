@@ -14,42 +14,58 @@ import Book from './Book'
 
 class Search extends React.Component {
 
+    state = {
+        query: ''
+    }
+
     getShelf = (book) => {
-        if(book.id in this.props.myBooks) {
-            return this.props.myBooks[book.id].shelf
+        if(book.id in this.props.books) {
+            return this.props.books[book.id].shelf
         }
         return 'none'
     }
 
+    updateQuery = (event) => {
+        const value = event.target.value
+        this.setState({query: value})
+        this.props.searchBook(value)
+    }
+
     render () {
-        const {updateShelf} = this.props,
-            searchResults = this.props.searchResults || []
+
+        const {updateShelf} = this.props
+        const searchResults = this.props.searchResults || []
+
         return (
             <div className="search-books">
                 <div className="search-books-bar">
                     <Link to="/" className="close-search" />
                     <div className="search-books-input-wrapper">
                         <input
+                            value={this.state.query}
                             type="text"
                             placeholder="Search by title or author"
-                            onChange={(e) => this.props.searchBook(e.target.value)}
+                            onChange={this.updateQuery}
                         />
 
                 </div>
             </div>
             <div className="search-books-results">
                 <ol className="books-grid">
-                        {searchResults.hasOwnProperty('error') ?
-                            searchResults.error :
-                            searchResults.map((book) => (
+                    {this.props.loading? 'LOADING ...':''}
+                    {searchResults.hasOwnProperty('error') ?
+                        searchResults.error :
+                        this.state.query.length ?
+                            searchResults.map( (book) => (
                                 <Book
                                     key={book.id}
                                     book={book}
                                     shelf={this.getShelf(book)}
                                     updateShelf={updateShelf}
                                 />
-                            ))
-                        }
+                            )):
+                            'Waiting for your search ;)'
+                    }
                 </ol>
             </div>
         </div>

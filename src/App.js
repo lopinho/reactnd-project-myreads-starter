@@ -9,30 +9,46 @@ import { Route } from 'react-router-dom'
 class BooksApp extends React.Component {
 
     state = {
-        myBooks: {},
-        books: false,
+        shelfs: {},
+        books: {},
         loading: true,
         searchResults: []
     }
 
     componentDidMount = () => {
         BooksAPI.getAll()
-        .then( (books) => {
+        .then((books) => {
             const myBooks = {}
-            books.forEach((book) => myBooks[book.id] = book)
+            const shelfs = {}
+
+            books.forEach((book) => {
+                myBooks[book.id] = book;
+
+                if (book.shelf in shelfs) {
+                    shelfs[book.shelf].push(book.id)
+                } else {
+                    shelfs[book.shelf] = [book.id]
+                }
+            })
+
             this.setState({
-                books:books,
-                myBooks: myBooks,
+                books: myBooks,
+                shelfs: shelfs,
                 loading: false
             })
         })
     }
 
     searchBook = (query) => {
+        this.setState({
+            loading: true,
+            searchResults: []
+        })
         BooksAPI.search(query)
         .then((searchResults) => {
             this.setState({
-                searchResults
+                searchResults,
+                loading: false
             })
         })
     }
@@ -40,11 +56,15 @@ class BooksApp extends React.Component {
         this.setState({loading: true})
         BooksAPI.update(book, shelf)
         .then( (updatedShelfs) => {
-            book.shelf = shelf
-            this.setState( (currentState) => ({
-                books: [...currentState.books.filter((item) => (item.id !== book.id)), book],
-                loading: false
-            }))
+            this.setState((prevState) => {
+                const books = prevState.books
+                books[book.id].shelf = shelf
+                return {
+                    shelfs: updatedShelfs,
+                    books: books,
+                    loading: false
+                }
+            })
         })
 
     }
@@ -57,7 +77,7 @@ class BooksApp extends React.Component {
                         loading={this.state.loading}
                         searchResults={this.state.searchResults}
                         searchBook={(query) => this.searchBook(query)}
-                        myBooks={this.state.myBooks}
+                        books={this.state.books}
                         updateShelf={(book, shelf) => {
                             this.updateShelf(book, shelf)
                             history.push('/')
@@ -68,6 +88,8 @@ class BooksApp extends React.Component {
                     <ListBooks
                         loading={this.state.loading}
                         books={this.state.books}
+                        shelfs={this.state.shelfs}
+                        clearSearch={() => this.setState({searchResults: []}) }
                         updateShelf={(book, shelf) => (this.updateShelf(book, shelf))}
                     />
                 )}/>
