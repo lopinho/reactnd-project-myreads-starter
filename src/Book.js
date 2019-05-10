@@ -3,13 +3,14 @@ import React from 'react'
 
 function book (props) {
     const thumbnail = props.book.imageLinks && (props.book.imageLinks.smallThumbnail || props.book.imageLinks.thumbnail) || ''
-    const { title, authors, shelf } = props.book
+    const { title, authors} = props.book
+    const shelf = props.book.shelf || props.shelf || 'none'
     const options = [
         {name: "Currently Reading", id: "currentlyReading"},
         {name: "Want to Read", id: "wantToRead"},
         {name: "Read", id: "read"},
         {name: "None", id: "none"},
-    ];
+    ]
 
     return(
         <div className="book">

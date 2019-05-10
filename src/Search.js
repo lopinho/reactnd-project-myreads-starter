@@ -13,6 +13,14 @@ import Book from './Book'
 
 
 class Search extends React.Component {
+
+    getShelf = (book) => {
+        if(book.id in this.props.myBooks) {
+            return this.props.myBooks[book.id].shelf
+        }
+        return 'none'
+    }
+
     render () {
         const {updateShelf} = this.props,
             searchResults = this.props.searchResults || []
@@ -37,6 +45,7 @@ class Search extends React.Component {
                                 <Book
                                     key={book.id}
                                     book={book}
+                                    shelf={this.getShelf(book)}
                                     updateShelf={updateShelf}
                                 />
                             ))

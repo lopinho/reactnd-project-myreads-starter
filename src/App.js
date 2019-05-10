@@ -9,6 +9,7 @@ import { Route } from 'react-router-dom'
 class BooksApp extends React.Component {
 
     state = {
+        myBooks: {},
         books: false,
         loading: true,
         searchResults: []
@@ -17,8 +18,11 @@ class BooksApp extends React.Component {
     componentDidMount = () => {
         BooksAPI.getAll()
         .then( (books) => {
+            const myBooks = {}
+            books.forEach((book) => myBooks[book.id] = book)
             this.setState({
                 books:books,
+                myBooks: myBooks,
                 loading: false
             })
         })
@@ -53,6 +57,7 @@ class BooksApp extends React.Component {
                         loading={this.state.loading}
                         searchResults={this.state.searchResults}
                         searchBook={(query) => this.searchBook(query)}
+                        myBooks={this.state.myBooks}
                         updateShelf={(book, shelf) => {
                             this.updateShelf(book, shelf)
                             history.push('/')
